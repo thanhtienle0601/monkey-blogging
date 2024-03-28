@@ -1,15 +1,14 @@
-import { Fragment } from "react";
+import { Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./contexts/auth-context";
+import SignUp from "./pages/SignUp";
 
 function App() {
   return (
-    <Fragment>
-      <h1 className="red">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae incidunt
-        nam voluptates reiciendis quam ipsum, maxime consequuntur nihil dolorem
-        vero exercitationem velit quos aperiam fugit autem recusandae voluptatem
-        alias cumque!
-      </h1>
-    </Fragment>
+    <AuthProvider>
+      <Routes>
+        <Route path="/sign-up" element={<SignUp></SignUp>}></Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 

@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import styled from "styled-components";
-import { Label } from "../components";
+import { Label } from "../components/label";
+import Input from "../components/input/Input";
+import { useForm } from "react-hook-form";
+import { IconEyeClose } from "../icons";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -28,51 +31,35 @@ const SignUpPageStyles = styled.div`
     flex-direction: column;
     row-gap: 16px;
   }
-
-  .label {
-    cursor: pointer;
-  }
-
-  .input {
-    padding: 20px;
-    border-radius: 8px;
-    outline: none;
-    border: 1px solid transparent;
-    background-color: #e7ecf3;
-    font-weight: 500;
-    transition: all 0.25s linear;
-  }
-
-  .input:focus {
-    border-color: ${(props) => props.theme.primary};
-    background-color: white;
-  }
-
-  .input::-webkit-input-placeholder {
-    color: ${(props) => props.theme.grayLight};
-  }
-  .input::-moz-input-placeholder {
-    color: ${(props) => props.theme.grayLight};
-  }
 `;
 
 const SignUp = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+    watch,
+  } = useForm();
+  const handleSignUp = (values) => {
+    console.log(values);
+  };
   return (
     <SignUpPageStyles>
       <div className="container">
         <img srcSet="/monkey1.png 2x" alt="logo" className="logo" />
         <h1 className="heading">Monkey Blogging</h1>
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit(handleSignUp)}>
           <div className="field">
             <Label className="label" htmlFor="fullname">
               Fullname
             </Label>
-            <input
-              className="input"
+            <Input
               type="text"
               placeholder="Please enter your fullname"
               id="fullname"
-            />
+              name="fullname"
+              control={control}
+            ></Input>
           </div>
         </form>
       </div>

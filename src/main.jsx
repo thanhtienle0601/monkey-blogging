@@ -7,6 +7,8 @@ import { theme } from "./utils/constants.jsx";
 import { GlobalStyles } from "./styles/GlobalStyles.jsx";
 import { BrowserRouter } from "react-router-dom";
 import isPropValid from "@emotion/is-prop-valid";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -22,6 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <GlobalStyles></GlobalStyles>
         <BrowserRouter>
           <App />
+          <ToastContainer></ToastContainer>
         </BrowserRouter>
       </ThemeProvider>
     </StyleSheetManager>

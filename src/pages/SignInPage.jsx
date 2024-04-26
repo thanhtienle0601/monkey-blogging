@@ -14,6 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../fireBase/firebase-config";
+import { InputPasswordToggle } from "../components/input";
 
 const schema = yup.object({
   email: yup
@@ -36,7 +37,6 @@ const SignInPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [showPassword, setShowPassword] = useState(false);
   const {
     control,
     handleSubmit,
@@ -72,25 +72,8 @@ const SignInPage = () => {
         </Field>
         <Field>
           <Label htmlFor="password">Password</Label>
-          <Input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            control={control}
-            placeholder="Enter your password"
-          >
-            {showPassword ? (
-              <IconEyeOpen
-                className="icon-input"
-                onClick={() => setShowPassword(false)}
-              ></IconEyeOpen>
-            ) : (
-              <IconEyeClose
-                className="icon-input"
-                onClick={() => setShowPassword(true)}
-              ></IconEyeClose>
-            )}
-          </Input>
         </Field>
+        <InputPasswordToggle control={control}></InputPasswordToggle>
         <div className="have-account">
           you have not have an account ?{" "}
           <NavLink to={"/sign-up"}>Register</NavLink>

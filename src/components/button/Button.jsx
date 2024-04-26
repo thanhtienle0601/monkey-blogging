@@ -24,11 +24,12 @@ const ButtonStyles = styled.button`
     props.kind === "primary" &&
     css`
       color: white;
-      background-image: linear-gradient(
+      /* background-image: linear-gradient(
         to right bottom,
         ${(props) => props.theme.primary},
         ${(props) => props.theme.secondary}
-      );
+      ); */
+      background-color: ${(props) => props.theme.primary};
     `};
   ${(props) =>
     props.kind === "secondary" &&
@@ -83,8 +84,4 @@ const Button = ({
   );
 };
 
-Button.propTypes = {
-  type: PropTypes.oneOf(["submit", "button"]).isRequired,
-  isLoading: PropTypes.bool,
-};
 export default Button;

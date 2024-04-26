@@ -13,10 +13,17 @@ const InputStyles = styled.div`
     padding: ${(props) => (props.hasIcon ? "20px 60px 20px 20px" : "20px")};
     border-radius: 8px;
     outline: none;
-    border: 1px solid transparent;
-    background-color: #e7ecf3;
+    border: 1px solid ${(props) => props.theme.grayf1};
+    background-color: transparent;
     font-weight: 500;
     transition: all 0.25s linear;
+    color: ${(props) => props.theme.black};
+  }
+  input::-webkit-input-placeholder {
+    color: #b2b3bd;
+  }
+  input::-moz-input-placeholder {
+    color: #b2b3bd;
   }
 
   input:focus {
@@ -24,12 +31,12 @@ const InputStyles = styled.div`
     background-color: white;
   }
 
-  input::-webkit-input-placeholder {
+  /* input::-webkit-input-placeholder {
     color: ${(props) => props.theme.grayLight};
   }
   input::-moz-input-placeholder {
     color: ${(props) => props.theme.grayLight};
-  }
+  } */
 
   .icon-input {
     position: absolute;
@@ -40,14 +47,7 @@ const InputStyles = styled.div`
   }
 `;
 
-const Input = ({
-  name,
-  type = "text",
-  children,
-
-  control,
-  ...props
-}) => {
+const Input = ({ name = "", type = "text", children, control, ...props }) => {
   const { field } = useController({
     control,
     name,
@@ -55,7 +55,7 @@ const Input = ({
   });
   return (
     <InputStyles hasIcon={children ? true : false}>
-      <input id={name} name={name} type={type} {...field} {...props} />
+      <input id={name} type={type} {...field} {...props} />
       {children}
     </InputStyles>
   );

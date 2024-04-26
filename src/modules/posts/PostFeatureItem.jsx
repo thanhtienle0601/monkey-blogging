@@ -1,17 +1,25 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import PostCategory from "./PostCategory";
+import PostTitle from "./PostTitle";
+import PostInfo from "./PostInfo";
+import PostImage from "./PostImage";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../fireBase/firebase-config";
+import slugify from "slugify";
 
 const PostFeatureItemStyles = styled.div`
   width: 100%;
   height: 272px;
   border-radius: 16px;
   position: relative;
-  .post-img {
+  .post-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    border-radius: 16px;
+    border-radius: inherit;
   }
   .post-overlay {
     inset: 0;
@@ -39,66 +47,46 @@ const PostFeatureItemStyles = styled.div`
     align-items: center;
     margin-bottom: 16px;
   }
-  .post-category {
-    display: inline-block;
-    padding: 8px 12px;
-    border-radius: 8px;
-    color: #6b6b6b;
-    font-size: 14px;
-    font-weight: 600;
-    background-color: #f3f3f3;
-    white-space: nowrap;
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .post-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    margin-left: auto;
-  }
-  .post-dot {
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    background-color: white;
-    border-radius: 100%;
-  }
-  .post-title {
-    font-weight: bold;
-    line-height: 1.5;
-    display: block;
-    font-size: 22px;
-    color: white;
-  }
 `;
 
-const PostFeatureItem = () => {
+const PostFeatureItem = ({ data }) => {
+  const [category, setCategory] = useState({});
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    const getCategory = async () => {
+      const categoryRef = doc(db, "categories", data.categoryId);
+      const categorySnap = await getDoc(categoryRef);
+      setCategory(categorySnap.data());
+    };
+    getCategory();
+  }, [data.categoryId]);
+  useEffect(() => {
+    const getUser = async () => {
+      const userRef = doc(db, "users", data.userId);
+      const userSnap = await getDoc(userRef);
+      setUser(userSnap.data());
+    };
+    getUser();
+  }, [data.userId]);
+  if (!data) return null;
+  const timestamp = data?.createdAt?.seconds
+    ? new Date(data?.createdAt?.seconds * 1000)
+    : new Date();
+  const formatDate = new Date(timestamp).toLocaleDateString("vi-VI");
   return (
     <PostFeatureItemStyles>
-      <img
-        src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt=""
-        className="post-img"
-      />
+      <PostImage url={data.image} alt=""></PostImage>
       <div className="post-overlay"></div>
       <div className="post-content">
         <div className="post-top">
-          <span className="post-category">Kiến thức</span>
-          <div className="post-info">
-            <span className="post-time">Mar 23</span>
-            <span className="post-dot"></span>
-            <span className="post-author">Andiez Le</span>
-          </div>
+          <PostCategory className="capitalize">{category?.name}</PostCategory>
+          <PostInfo
+            to={slugify(user?.fullname || "", { lower: true })}
+            authorName={user?.fullname}
+            time={formatDate}
+          ></PostInfo>
         </div>
-        <h3 className="post-title">
-          Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-        </h3>
+        <PostTitle size="large">{data.title}</PostTitle>
       </div>
     </PostFeatureItemStyles>
   );

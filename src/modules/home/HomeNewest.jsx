@@ -7,30 +7,34 @@ import PostNewestItem from "../posts/PostNewestItem";
 import PostItem from "../posts/PostItem";
 
 const HomeNewestStyles = styled.div`
-  margin-bottom: 40px;
-  .newest-right {
-    background-color: ${(props) => props.theme.pinkLight};
+  .layout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-gap: 40px;
+    margin-bottom: 64px;
+    align-items: start;
+  }
+  .sidebar {
+    padding: 28px 20px;
+    background-color: #f3edff;
     border-radius: 16px;
-    padding: 20px;
   }
 `;
 
 const HomeNewest = () => {
   return (
-    <HomeNewestStyles>
+    <HomeNewestStyles className="home-block">
       <div className="container">
         <Heading>Newest</Heading>
-        <div className="grid-layout-2">
-          <div className="newest-left">
-            <PostNewestItemLarge></PostNewestItemLarge>
-          </div>
-          <div className="newest-right">
+        <div className="layout">
+          <PostNewestItemLarge></PostNewestItemLarge>
+          <div className="sidebar">
             <PostNewestItem></PostNewestItem>
             <PostNewestItem></PostNewestItem>
             <PostNewestItem></PostNewestItem>
           </div>
         </div>
-        <div className="grid-layout-4">
+        <div className="grid-layout grid-layout--primary">
           <PostItem></PostItem>
           <PostItem></PostItem>
           <PostItem></PostItem>

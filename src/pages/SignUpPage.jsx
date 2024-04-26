@@ -12,9 +12,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../fireBase/firebase-config";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { NavLink, useNavigate } from "react-router-dom";
 import AuthenticationPage from "./AuthenticationPage";
+import { InputPasswordToggle } from "../components/input";
+import slugify from "slugify";
 
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
@@ -30,7 +32,6 @@ const schema = yup.object({
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const {
     control,
     handleSubmit,
@@ -66,11 +67,17 @@ const SignUpPage = () => {
       displayName: values.fullname,
     });
     const colRef = collection(db, "users");
-    await addDoc(colRef, {
+    await setDoc(doc(db, "users", auth.currentUser.uid), {
       fullname: values.fullname,
       email: values.email,
       password: values.password,
+      username: slugify(values.fullname, { lower: true }),
     });
+    // await addDoc(colRef, {
+    //   fullname: values.fullname,
+    //   email: values.email,
+    //   password: values.password,
+    // });
     toast.success("Register Successfully !!!");
     navigate("/");
   };
@@ -106,25 +113,7 @@ const SignUpPage = () => {
           <Label className="label" htmlFor="password">
             Password
           </Label>
-          <Input
-            type={showPassword ? "text" : "password"}
-            placeholder="Please enter your password"
-            id="password"
-            name="password"
-            control={control}
-          >
-            {showPassword ? (
-              <IconEyeOpen
-                className="icon-input"
-                onClick={() => setShowPassword(false)}
-              ></IconEyeOpen>
-            ) : (
-              <IconEyeClose
-                className="icon-input"
-                onClick={() => setShowPassword(true)}
-              ></IconEyeClose>
-            )}
-          </Input>
+          <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
         <div className="have-account">
           you already have an account ? <NavLink to={"/sign-in"}>Login</NavLink>

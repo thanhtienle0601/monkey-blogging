@@ -3,26 +3,25 @@
 import React from "react";
 import styled from "styled-components";
 
-const HeadingStyles = styled.div`
-  .post-heading {
-    color: ${(props) => props.theme.violetDark};
-    font-size: 36px;
-    margin-bottom: 40px;
-  }
-  .border-top {
-    width: 50px;
-    height: 5px;
+const HeadingStyles = styled.h2`
+  color: ${(props) => props.theme.violetDark};
+  font-size: 28px;
+  margin-bottom: 30px;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
     background-color: ${(props) => props.theme.blueLight};
+    width: 50px;
+    height: 4px;
+    top: 0;
+    left: 0;
+    transform: translateY(-150%);
   }
 `;
 
-const Heading = ({ children }) => {
-  return (
-    <HeadingStyles>
-      <div className="border-top"></div>
-      <h1 className="post-heading">{children}</h1>
-    </HeadingStyles>
-  );
+const Heading = ({ className = "", children }) => {
+  return <HeadingStyles className={className}>{children}</HeadingStyles>;
 };
 
 export default Heading;
